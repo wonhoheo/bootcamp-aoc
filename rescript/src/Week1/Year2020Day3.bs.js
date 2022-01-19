@@ -2,10 +2,77 @@
 'use strict';
 
 var Fs = require("fs");
+var Belt_Array = require("rescript/lib/js/belt_Array.js");
+var Caml_array = require("rescript/lib/js/caml_array.js");
 
 var input = Fs.readFileSync("input/Week1/Year2020Day3.sample.txt", "utf8");
 
-console.log(input);
+var pattern = [
+  [
+    1,
+    1
+  ],
+  [
+    3,
+    1
+  ],
+  [
+    5,
+    1
+  ],
+  [
+    7,
+    1
+  ],
+  [
+    1,
+    2
+  ]
+];
+
+var map = input.split("\n");
+
+var treeCounts = Belt_Array.reduce(Belt_Array.map(pattern, (function (param) {
+            if (param.length !== 2) {
+              throw {
+                    RE_EXN_ID: "Match_failure",
+                    _1: [
+                      "Year2020Day3.res",
+                      8,
+                      26
+                    ],
+                    Error: new Error()
+                  };
+            }
+            var right = param[0];
+            var down = param[1];
+            var column = 0;
+            var row = 0;
+            var rowMax = map.length - 1 | 0;
+            var columnMax = Caml_array.get(map, row).length - 1 | 0;
+            var trees = {
+              contents: 0
+            };
+            while(row < rowMax) {
+              column = column + right | 0;
+              if (column > columnMax) {
+                column = column - (columnMax + 1 | 0) | 0;
+              }
+              row = row + down | 0;
+              if (Caml_array.get(map, row)[column] === "#") {
+                trees.contents = trees.contents + 1 | 0;
+              }
+              
+            };
+            return trees;
+          })), 1.0, (function (prev, current) {
+        return prev * current.contents;
+      }));
+
+console.log(treeCounts);
 
 exports.input = input;
+exports.pattern = pattern;
+exports.map = map;
+exports.treeCounts = treeCounts;
 /* input Not a pure module */
