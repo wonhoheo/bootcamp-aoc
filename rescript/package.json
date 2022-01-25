@@ -2,7 +2,7 @@
   "name": "rescript-bootcamp",
   "version": "0.1.0",
   "scripts": {
-    "dev": "nodemon $f",
+    "dev": "nodemon --exec babel-node $f",
     "clean": "rescript clean",
     "build": "rescript build",
     "watch": "rescript build -w"
@@ -16,6 +16,9 @@
     "nodemon": "^2.0.7"
   },
   "dependencies": {
+    "@babel/core": "^7.16.10",
+    "@babel/node": "^7.16.8",
+    "@babel/preset-env": "^7.16.11",
     "rescript": "^9.1.4"
   }
 }

@@ -3,7 +3,7 @@ const fs = require("fs");
 fs.readFile("input/Week1/Year2020Day5.sample.txt", "utf8", (err, data) => {
   let dataArray = data.toString().split("\n");
 
-  let result = median(
+  let result =
     dataArray.map((val) => {
       let boardLength = val.length;
       let rowMax = 127;
@@ -34,17 +34,14 @@ fs.readFile("input/Week1/Year2020Day5.sample.txt", "utf8", (err, data) => {
       }
       return row * 8 + column;
     })
-  );
+    .sort((a,b) => a-b);
   // .reduce((previous, current) => {
   //   return previous > current ? previous : current;
   // });
-  console.log(result);
-});
 
-const median = (arr) => {
-  let middle = Math.floor(arr.length / 2);
-  arr = [...arr].sort((a, b) => a - b);
-  return arr.length % 2 !== 0
-    ? arr[middle]
-    : (arr[middle - 1] + arr[middle]) / 2;
-};
+  result.forEach((val, idx) => {
+    const currentSeat = result[idx];
+    if (result[idx + 1] === currentSeat + 2) console.log(currentSeat + 1);
+  })
+
+});

@@ -38,8 +38,8 @@ var treeCounts = Belt_Array.reduce(Belt_Array.map(pattern, (function (param) {
                     RE_EXN_ID: "Match_failure",
                     _1: [
                       "Year2020Day3.res",
-                      8,
-                      26
+                      9,
+                      19
                     ],
                     Error: new Error()
                   };

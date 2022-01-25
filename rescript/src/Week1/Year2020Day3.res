@@ -4,8 +4,9 @@ let pattern = [[1, 1], [3, 1], [5, 1], [7, 1], [1, 2]]
 
 let map = Js.String.split("\n", input)
 
-let treeCounts = Belt_Array.reduce(
-  Belt_Array.map(pattern, ([right, down]) => {
+let treeCounts =
+  pattern
+  ->Belt_Array.map(([right, down]) => {
     let column = ref(0)
     let row = ref(0)
 
@@ -28,9 +29,7 @@ let treeCounts = Belt_Array.reduce(
     }
 
     trees
-  }),
-  1.0,
-  (prev, current) => prev *. current.contents->Belt.Int.toFloat,
-)
+  })
+  ->Belt_Array.reduce(1.0, (prev, current) => prev *. current.contents->Belt.Int.toFloat)
 
 Js.log(treeCounts)
