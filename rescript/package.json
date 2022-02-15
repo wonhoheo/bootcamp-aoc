@@ -19,6 +19,8 @@
     "@babel/core": "^7.16.10",
     "@babel/node": "^7.16.8",
     "@babel/preset-env": "^7.16.11",
+    "@greenlabs/garter": "^0.6.0",
+    "lodash": "^4.17.21",
     "rescript": "^9.1.4"
   }
 }

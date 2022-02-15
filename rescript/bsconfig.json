@@ -6,6 +6,7 @@
     "subdirs": true
   },
   "suffix": ".bs.js",
+  "bs-dependencies": ["@greenlabs/garter"],
   "package-specs": [
     {
       "module": "commonjs",

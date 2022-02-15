@@ -4,75 +4,54 @@
 var Fs = require("fs");
 var Belt_Array = require("rescript/lib/js/belt_Array.js");
 var Caml_array = require("rescript/lib/js/caml_array.js");
+var Caml_int32 = require("rescript/lib/js/caml_int32.js");
 
 var input = Fs.readFileSync("input/Week1/Year2020Day3.sample.txt", "utf8");
 
-var pattern = [
-  [
-    1,
-    1
-  ],
-  [
+var pattern = [[
     3,
     1
-  ],
-  [
-    5,
-    1
-  ],
-  [
-    7,
-    1
-  ],
-  [
-    1,
-    2
-  ]
-];
+  ]];
 
-var map = input.split("\n");
-
-var treeCounts = Belt_Array.reduce(Belt_Array.map(pattern, (function (param) {
-            if (param.length !== 2) {
-              throw {
-                    RE_EXN_ID: "Match_failure",
-                    _1: [
-                      "Year2020Day3.res",
-                      9,
-                      19
-                    ],
-                    Error: new Error()
-                  };
-            }
-            var right = param[0];
-            var down = param[1];
-            var column = 0;
-            var row = 0;
-            var rowMax = map.length - 1 | 0;
-            var columnMax = Caml_array.get(map, row).length - 1 | 0;
-            var trees = {
-              contents: 0
-            };
-            while(row < rowMax) {
-              column = column + right | 0;
-              if (column > columnMax) {
-                column = column - (columnMax + 1 | 0) | 0;
-              }
-              row = row + down | 0;
-              if (Caml_array.get(map, row)[column] === "#") {
-                trees.contents = trees.contents + 1 | 0;
-              }
-              
-            };
-            return trees;
-          })), 1.0, (function (prev, current) {
-        return prev * current.contents;
+var dataArray = Belt_Array.map(input.split("\n"), (function (val) {
+        return val.split("");
       }));
 
-console.log(treeCounts);
+function part1(array, x, y) {
+  var result = {
+    column: 0,
+    row: 0,
+    trees: 0
+  };
+  while(result.row < array.length) {
+    var columnUnit = Caml_int32.mod_(result.column, Caml_array.get(array, 0).length);
+    var point = Caml_array.get(Caml_array.get(array, result.row), columnUnit);
+    console.log([
+          result.row,
+          columnUnit
+        ]);
+    if (point === "#") {
+      result.trees = result.trees + 1 | 0;
+    }
+    result.column = result.column + x | 0;
+    result.row = result.row + y | 0;
+  };
+  return result.trees;
+}
+
+console.log(part1(dataArray, 3, 1));
+
+function part2(array, slopes) {
+  return Belt_Array.reduce(Belt_Array.map(slopes, (function (val) {
+                    return part1(array, Caml_array.get(val, 0), Caml_array.get(val, 1));
+                  })), 1.0, (function (prev, current) {
+                return prev * current;
+              }));
+}
 
 exports.input = input;
 exports.pattern = pattern;
-exports.map = map;
-exports.treeCounts = treeCounts;
+exports.dataArray = dataArray;
+exports.part1 = part1;
+exports.part2 = part2;
 /* input Not a pure module */

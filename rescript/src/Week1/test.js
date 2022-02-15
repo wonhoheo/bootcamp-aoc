@@ -1,34 +1,26 @@
 const fs = require("fs");
+const util = require("util");
+const _ = require("lodash");
+const read = util.promisify(fs.readFile);
 
-const text = fs.readFileSync("input/Week1/Year2020Day3.sample.txt", 'utf-8');
-const map = text.toString().split("\n");
-console.log(map);
-// const map = text.split("\n").map(line => console.log(line + "&&&&&&&&&&&&&&&&&"))
+const loadGroup = async () => {
+  const file = await read("input/Week1/Year2020Day6.sample.txt", "utf8");
+  const groups = file.split("\n\n").map((group) => group.split("\n"));
 
-// console.log(map)
+  return groups;
+};
 
-// map.forEach(el => {
-//   el.pop()
-// }); // '\r' 제거
+const intersection = (group) => {
+  return _.intersection(...group.map((person) => person.split(""))).length;
+};
 
-// console.log(map)
-
-let x = 0;
-let y = 0;
-let countTrees = 0;
-let bottom = map.length;
-
-while (true) {
-  x += 3;
-  y += 1;
-
-  if (y >= bottom) {
-    break;
+const part2 = async () => {
+  const groups = await loadGroup();
+  let count = 0;
+  for (let i = 0; i < groups.length; i++) {
+    count += intersection(groups[i]);
   }
-  // console.log(`x: ${x}   y:${y}   ${map[y][x % map[y].length]}`)
-  if (map[y][x % map[y].length] === "#") {
-    countTrees++;
-    // console.log(countTrees)
-  }
-}
-console.log(countTrees);
+  console.log("Total part 2", count);
+};
+
+part2();

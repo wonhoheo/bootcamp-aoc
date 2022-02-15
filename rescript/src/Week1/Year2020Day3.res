@@ -1,35 +1,40 @@
+type toboggan = {
+  mutable column: int,
+  mutable row: int,
+  mutable trees: int,
+}
+
 let input = Node.Fs.readFileAsUtf8Sync("input/Week1/Year2020Day3.sample.txt")
 
-let pattern = [[1, 1], [3, 1], [5, 1], [7, 1], [1, 2]]
+let pattern = [[3, 1]]
 
-let map = Js.String.split("\n", input)
+let dataArray = Js.String2.split(input, "\n")->Belt.Array.map(val => Js.String2.split(val, ""))
 
-let treeCounts =
-  pattern
-  ->Belt_Array.map(([right, down]) => {
-    let column = ref(0)
-    let row = ref(0)
+let part1 = (array, x, y) => {
+  let result = {column: 0, row: 0, trees: 0}
 
-    let rowMax = map->Js.Array2.length - 1
-    let columnMax = map[row.contents]->Js.String.length - 1
-    let trees = ref(0)
-
-    while row.contents < rowMax {
-      column := column.contents + right
-
-      if column.contents > columnMax {
-        column := column.contents - (columnMax + 1)
-      }
-
-      row := row.contents + down
-
-      if map[row.contents]->Js.String2.get(column.contents) === "#" {
-        trees := trees.contents + 1
-      }
+  while result.row < array->Js.Array2.length {
+    let columnUnit = mod(result.column, array[0]->Js.Array2.length)
+    let point = array[result.row][columnUnit]
+    Js.log([result.row, columnUnit])
+    if point === "#" {
+      result.trees = result.trees + 1
     }
 
-    trees
-  })
-  ->Belt_Array.reduce(1.0, (prev, current) => prev *. current.contents->Belt.Int.toFloat)
+    result.column = result.column + x
+    result.row = result.row + y
+  }
+  result.trees
+}
 
-Js.log(treeCounts)
+part1(dataArray, 3, 1)->Js.log
+
+let part2 = (array, slopes) => {
+  slopes
+  ->Belt.Array.map(val => {
+    part1(array, val[0], val[1])
+  })
+  ->Belt.Array.reduce(1.0, (prev, current) => prev *. current->Belt.Int.toFloat)
+}
+
+// part2(dataArray, pattern)->Js.log
